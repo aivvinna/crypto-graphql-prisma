@@ -28,3 +28,4 @@ type Comment {
   updatedAt: DateTime!
   createdAt: DateTime!
 }
+
