@@ -12,7 +12,7 @@ const Query = {
     if (args.query) {
       opArgs.where = {
         OR: [{
-          name_contains: args.query
+          username_contains: args.query
         }]
       }
     }

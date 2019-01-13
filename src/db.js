@@ -1,15 +1,15 @@
 let users = [{
   id: '1',
-  name: 'Bob',
+  username: 'Bob',
   email: 'bob@gmail.com',
   age: 30
 }, {
   id: '2',
-  name: 'James',
+  username: 'James',
   email: 'james@gmail.com'
 }, {
   id: '3',
-  name: 'Mike',
+  username: 'Mike',
   email: 'mike@gmail.com'
 }]
 
