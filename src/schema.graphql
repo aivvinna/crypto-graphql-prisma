@@ -43,6 +43,8 @@ type Query {
     username: String
     email: String
     password: String
+    location: String
+    bio: String
     following: ID
   }
 
