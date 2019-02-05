@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Feb 05 2019 22:33:14 GMT+0900 (Japan Standard Time)
+# timestamp: Wed Feb 06 2019 00:09:11 GMT+0900 (Japan Standard Time)
 
 type AggregatePost {
   count: Int!
@@ -73,6 +73,7 @@ type Post implements Node {
   content: String!
   category: String
   author: User!
+  parent: Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   updatedAt: DateTime!
   createdAt: DateTime!
@@ -92,12 +93,8 @@ input PostCreateInput {
   content: String!
   category: String
   author: UserCreateOneWithoutPostsInput!
-  posts: PostCreateManyInput
-}
-
-input PostCreateManyInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+  parent: PostCreateOneWithoutPostsInput
+  posts: PostCreateManyWithoutParentInput
 }
 
 input PostCreateManyWithoutAuthorInput {
@@ -105,10 +102,35 @@ input PostCreateManyWithoutAuthorInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PostCreateManyWithoutParentInput {
+  create: [PostCreateWithoutParentInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PostCreateOneWithoutPostsInput {
+  create: PostCreateWithoutPostsInput
+  connect: PostWhereUniqueInput
+}
+
 input PostCreateWithoutAuthorInput {
   content: String!
   category: String
-  posts: PostCreateManyInput
+  parent: PostCreateOneWithoutPostsInput
+  posts: PostCreateManyWithoutParentInput
+}
+
+input PostCreateWithoutParentInput {
+  content: String!
+  category: String
+  author: UserCreateOneWithoutPostsInput!
+  posts: PostCreateManyWithoutParentInput
+}
+
+input PostCreateWithoutPostsInput {
+  content: String!
+  category: String
+  author: UserCreateOneWithoutPostsInput!
+  parent: PostCreateOneWithoutPostsInput
 }
 
 """An edge in a connection."""
@@ -355,34 +377,17 @@ input PostSubscriptionWhereInput {
   node: PostWhereInput
 }
 
-input PostUpdateDataInput {
-  content: String
-  category: String
-  author: UserUpdateOneRequiredWithoutPostsInput
-  posts: PostUpdateManyInput
-}
-
 input PostUpdateInput {
   content: String
   category: String
   author: UserUpdateOneRequiredWithoutPostsInput
-  posts: PostUpdateManyInput
+  parent: PostUpdateOneWithoutPostsInput
+  posts: PostUpdateManyWithoutParentInput
 }
 
 input PostUpdateManyDataInput {
   content: String
   category: String
-}
-
-input PostUpdateManyInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
-  disconnect: [PostWhereUniqueInput!]
-  delete: [PostWhereUniqueInput!]
-  update: [PostUpdateWithWhereUniqueNestedInput!]
-  updateMany: [PostUpdateManyWithWhereNestedInput!]
-  deleteMany: [PostScalarWhereInput!]
-  upsert: [PostUpsertWithWhereUniqueNestedInput!]
 }
 
 input PostUpdateManyMutationInput {
@@ -401,20 +406,50 @@ input PostUpdateManyWithoutAuthorInput {
   upsert: [PostUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
+input PostUpdateManyWithoutParentInput {
+  create: [PostCreateWithoutParentInput!]
+  connect: [PostWhereUniqueInput!]
+  disconnect: [PostWhereUniqueInput!]
+  delete: [PostWhereUniqueInput!]
+  update: [PostUpdateWithWhereUniqueWithoutParentInput!]
+  updateMany: [PostUpdateManyWithWhereNestedInput!]
+  deleteMany: [PostScalarWhereInput!]
+  upsert: [PostUpsertWithWhereUniqueWithoutParentInput!]
+}
+
 input PostUpdateManyWithWhereNestedInput {
   where: PostScalarWhereInput!
   data: PostUpdateManyDataInput!
 }
 
+input PostUpdateOneWithoutPostsInput {
+  create: PostCreateWithoutPostsInput
+  connect: PostWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: PostUpdateWithoutPostsDataInput
+  upsert: PostUpsertWithoutPostsInput
+}
+
 input PostUpdateWithoutAuthorDataInput {
   content: String
   category: String
-  posts: PostUpdateManyInput
+  parent: PostUpdateOneWithoutPostsInput
+  posts: PostUpdateManyWithoutParentInput
 }
 
-input PostUpdateWithWhereUniqueNestedInput {
-  where: PostWhereUniqueInput!
-  data: PostUpdateDataInput!
+input PostUpdateWithoutParentDataInput {
+  content: String
+  category: String
+  author: UserUpdateOneRequiredWithoutPostsInput
+  posts: PostUpdateManyWithoutParentInput
+}
+
+input PostUpdateWithoutPostsDataInput {
+  content: String
+  category: String
+  author: UserUpdateOneRequiredWithoutPostsInput
+  parent: PostUpdateOneWithoutPostsInput
 }
 
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
@@ -422,16 +457,26 @@ input PostUpdateWithWhereUniqueWithoutAuthorInput {
   data: PostUpdateWithoutAuthorDataInput!
 }
 
-input PostUpsertWithWhereUniqueNestedInput {
+input PostUpdateWithWhereUniqueWithoutParentInput {
   where: PostWhereUniqueInput!
-  update: PostUpdateDataInput!
-  create: PostCreateInput!
+  data: PostUpdateWithoutParentDataInput!
+}
+
+input PostUpsertWithoutPostsInput {
+  update: PostUpdateWithoutPostsDataInput!
+  create: PostCreateWithoutPostsInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutAuthorInput {
   where: PostWhereUniqueInput!
   update: PostUpdateWithoutAuthorDataInput!
   create: PostCreateWithoutAuthorInput!
+}
+
+input PostUpsertWithWhereUniqueWithoutParentInput {
+  where: PostWhereUniqueInput!
+  update: PostUpdateWithoutParentDataInput!
+  create: PostCreateWithoutParentInput!
 }
 
 input PostWhereInput {
@@ -608,6 +653,7 @@ input PostWhereInput {
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   author: UserWhereInput
+  parent: PostWhereInput
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput

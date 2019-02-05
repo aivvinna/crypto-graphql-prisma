@@ -34,9 +34,9 @@ const Query = {
 
     if (args.query) {
       opArgs.where.OR = [{
-        title_contains: args.query
+        content_contains: args.query
       }, {
-        body_contains: args.query
+        category_contains: args.query
       }]
     }
 
@@ -47,18 +47,15 @@ const Query = {
       first: args.first,
       skip: args.skip,
       after: args.after,
-      orderBy: args.orderBy,
-      where: {
-        published: true
-      }
+      orderBy: args.orderBy
     }
 
     if (args.query) {
       opArgs.where = {
         OR: [{
-          title_contains: args.query
+          content_contains: args.query
         }, {
-          body_contains: args.query
+          category_contains: args.query
         }]
       }
     }
@@ -80,8 +77,6 @@ const Query = {
       where: {
         id: args.id,
         OR: [{
-          published: true
-        }, {
           author: {
             id: userId
           }

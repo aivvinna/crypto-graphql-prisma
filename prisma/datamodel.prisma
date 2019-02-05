@@ -4,8 +4,8 @@ type User {
   email: String! @unique
   password: String!
   posts: [Post!]! @relation(name: "PostToUser", onDelete: CASCADE)
-  location: String
-  bio: String
+  location: String @default(value: "")
+  bio: String @default(value: "")
   following: [User!]! @relation(name: "UserToUser")
   followers: [User!]! @relation(name: "UserToUser")
   updatedAt: DateTime!
@@ -15,8 +15,9 @@ type User {
 type Post {
   id: ID! @unique
   content: String!
-  category: String
+  category: String @default(value: "")
   author: User! @relation(name: "PostToUser", onDelete: SET_NULL)
+  parent: Post @relation(name: "PostToPost")
   posts: [Post!]! @relation(name: "PostToPost")
   updatedAt: DateTime!
   createdAt: DateTime!
