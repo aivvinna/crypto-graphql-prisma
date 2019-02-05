@@ -1,10 +1,9 @@
-# import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
+# import UserOrderByInput, PostOrderByInput from './generated/prisma.graphql'
 
 type Query {
     users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
     posts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
     myPosts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
-    comments(first: Int, skip: Int, after: String, orderBy: CommentOrderByInput): [Comment!]!
     me: User!
     post(id: ID!): Post!
   }
@@ -17,13 +16,9 @@ type Query {
     createPost(data: CreatePostInput): Post!
     deletePost(id: ID!): Post!
     updatePost(id: ID!, data: UpdatePostInput!): Post!
-    createComment(data: CreateCommentInput): Comment!
-    deleteComment(id: ID!): Comment!
-    updateComment(id: ID!, data: UpdateCommentInput!): Comment!
   }
 
   type Subscription {
-    comment(postId: ID!): CommentSubscriptionPayload!
     post: PostSubscriptionPayload!
     myPost: PostSubscriptionPayload!
   }
@@ -52,24 +47,13 @@ type Query {
   }
 
   input CreatePostInput {
-    title: String!
-    body: String!
-    published: Boolean!
+    content: String!
+    category: String
   }
 
   input UpdatePostInput {
-    title: String
-    body: String
-    published: Boolean
-  }
-
-  input CreateCommentInput {
-    text: String!
-    post: ID!
-  }
-
-  input UpdateCommentInput {
-    text: String!
+    content: String
+    category: String
   }
 
   type User {
@@ -78,7 +62,8 @@ type Query {
     email: String
     password: String!
     posts: [Post!]!
-    comments: [Comment!]!
+    location: String!
+    bio: String!
     following: [User!]!
     followers: [User!]!
     updatedAt: String!
@@ -87,20 +72,10 @@ type Query {
 
   type Post {
     id: ID!
-    title: String!
-    body: String!
-    published: Boolean!
+    content: String!
+    category: String!
     author: User!
-    comments: [Comment!]!
-    updatedAt: String!
-    createdAt: String!
-  }
-
-  type Comment {
-    id: ID!
-    text: String!
-    author: User!
-    post: Post!
+    posts: [Post!]!
     updatedAt: String!
     createdAt: String!
   }
@@ -114,9 +89,4 @@ type Query {
   type PostSubscriptionPayload {
     mutation: MutationType!
     node: Post
-  }
-
-  type CommentSubscriptionPayload {
-    mutation: MutationType!
-    node: Comment
   }

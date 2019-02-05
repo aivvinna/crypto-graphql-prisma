@@ -64,16 +64,6 @@ const Query = {
     }
     return prisma.query.posts(opArgs, info)
   },
-  comments(parent, args, { prisma }, info) {
-    const opArgs = {
-      first: args.first,
-      skip: args.skip,
-      after: args.after,
-      orderBy: args.orderBy
-    }
-
-    return prisma.query.comments(opArgs, info)
-  },
   async me(parent, args, { prisma, request }, info) {
     const userId = getUserId(request)
 
