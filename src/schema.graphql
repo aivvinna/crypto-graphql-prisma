@@ -45,7 +45,8 @@ type Query {
     password: String
     location: String
     bio: String
-    following: ID
+    follow: ID
+    unfollow: ID
   }
 
   input CreatePostInput {

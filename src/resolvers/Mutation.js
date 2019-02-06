@@ -59,9 +59,15 @@ const Mutation = {
 
     let userExists
     
-    if (args.data.following) {
+    if (args.data.follow) {
       userExists = await prisma.exists.User({
-        id: args.data.following
+        id: args.data.follow
+      })
+    }
+
+    if (args.data.unfollow) {
+      userExists = await prisma.exists.User({
+        id: args.data.follow
       })
     }
 
@@ -69,7 +75,7 @@ const Mutation = {
       throw new Error('User does not exist')
     }
 
-    if (args.data.following) {
+    if (args.data.follow) {
       return prisma.mutation.updateUser({
         where: {
           id: userId
@@ -83,7 +89,28 @@ const Mutation = {
           bio: args.data.bio,
           following: {
             connect: {
-              id: args.data.following
+              id: args.data.follow
+            }
+          }
+        }
+      })
+    }
+
+    if (args.data.unfollow) {
+      return prisma.mutation.updateUser({
+        where: {
+          id: userId
+        },
+        data: {
+          username: args.data.username,
+          email: args.data.email,
+          password: args.data.password,
+          posts: args.data.posts,
+          location: args.data.location,
+          bio: args.data.bio,
+          following: {
+            disconnect: {
+              id: args.data.unfollow
             }
           }
         }
