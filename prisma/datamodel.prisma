@@ -15,7 +15,7 @@ type User {
 type Post {
   id: ID! @unique
   content: String!
-  category: String @default(value: "")
+  category: [String!]!
   author: User! @relation(name: "PostToUser", onDelete: SET_NULL)
   parent: Post @relation(name: "PostToPost")
   posts: [Post!]! @relation(name: "PostToPost")

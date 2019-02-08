@@ -131,7 +131,9 @@ const Mutation = {
       return prisma.mutation.createPost({
         data: {
           content: args.data.content,
-          category: args.data.category,
+          category: {
+            set: args.data.category
+          },
           author: {
             connect: {
               id: userId
