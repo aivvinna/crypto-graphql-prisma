@@ -1,7 +1,8 @@
-# import PostCreatecategoryInput, UserOrderByInput, PostWhereInput, PostOrderByInput from './generated/prisma.graphql'
+# import UserOrderByInput, UserWhereUniqueInput, PostCreatecategoryInput, PostWhereInput, PostOrderByInput from './generated/prisma.graphql'
 
 type Query {
     users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
+    user(where: UserWhereUniqueInput): User!
     posts(where: PostWhereInput, query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
     myPosts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
     me: User!

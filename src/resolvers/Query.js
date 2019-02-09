@@ -18,6 +18,11 @@ const Query = {
     }
     return prisma.query.users(opArgs, info)
   },
+  user(parent, args, { prisma }, info) {
+    return prisma.query.user({
+      where: args.where
+    }, info)
+  },
   myPosts(parent, args, { prisma, request }, info) {
     const userId = getUserId(request)
     const opArgs = {
@@ -68,7 +73,7 @@ const Query = {
       where: {
         id: userId
       }
-    })
+    }, info)
   },
   async post(parent, args, { prisma, request }, info) {
     const userId = getUserId(request, false)
