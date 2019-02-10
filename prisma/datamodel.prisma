@@ -6,6 +6,9 @@ type User {
   posts: [Post!]! @relation(name: "PostToUser", onDelete: CASCADE)
   location: String @default(value: "")
   bio: String @default(value: "")
+  favCryptos: [String!]!
+  upvotedPosts: [Post!]! @relation(name: "UpvotesToUser")
+  downvotedPosts: [Post!]! @relation(name: "DownvotesToUser")
   following: [User!]! @relation(name: "UserToUser")
   followers: [User!]! @relation(name: "UserToUser")
   updatedAt: DateTime!
@@ -16,6 +19,8 @@ type Post {
   id: ID! @unique
   content: String!
   category: [String!]!
+  upvotes: [User!]! @relation(name: "UpvotesToUser")
+  downvotes: [User!]! @relation(name: "DownvotesToUser")
   author: User! @relation(name: "PostToUser", onDelete: SET_NULL)
   parent: Post @relation(name: "PostToPost")
   posts: [Post!]! @relation(name: "PostToPost")
