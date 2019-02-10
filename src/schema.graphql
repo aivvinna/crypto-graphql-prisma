@@ -1,4 +1,4 @@
-# import UserOrderByInput, UserWhereUniqueInput, PostCreatecategoryInput, PostWhereInput, PostOrderByInput from './generated/prisma.graphql'
+# import * from './generated/prisma.graphql'
 
 type Query {
     users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
@@ -7,6 +7,9 @@ type Query {
     myPosts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
     me: User!
     post(id: ID!): Post!
+    userFollowingCount(id: ID!): UserConnection!
+    userFollowersCount(id: ID!): UserConnection!
+    userPostsCount(id: ID!): PostConnection!
   }
 
   type Mutation {
@@ -17,6 +20,8 @@ type Query {
     createPost(data: CreatePostInput): Post!
     deletePost(id: ID!): Post!
     updatePost(id: ID!, data: UpdatePostInput!): Post!
+    followUser(id: ID!): User!
+    unfollowUser(id: ID!): User!
   }
 
   type Subscription {
@@ -46,8 +51,6 @@ type Query {
     password: String
     location: String
     bio: String
-    follow: ID
-    unfollow: ID
   }
 
   input CreatePostInput {

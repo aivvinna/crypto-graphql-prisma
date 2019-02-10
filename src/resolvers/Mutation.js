@@ -57,71 +57,59 @@ const Mutation = {
       args.data.password = await hashPassword(args.data.password)
     }
 
-    let userExists
-    
-    if (args.data.follow) {
-      userExists = await prisma.exists.User({
-        id: args.data.follow
-      })
-    }
+    return prisma.mutation.updateUser({
+      where: {
+        id: userId
+      },
+      data: args.data
+    }, info)
+  },
+  async followUser(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
 
-    if (args.data.unfollow) {
-      userExists = await prisma.exists.User({
-        id: args.data.follow
-      })
-    }
+    const userExists = await prisma.exists.User({
+      id: args.id
+    })
 
     if (!userExists) {
       throw new Error('User does not exist')
-    }
-
-    if (args.data.follow) {
-      return prisma.mutation.updateUser({
-        where: {
-          id: userId
-        },
-        data: {
-          username: args.data.username,
-          email: args.data.email,
-          password: args.data.password,
-          posts: args.data.posts,
-          location: args.data.location,
-          bio: args.data.bio,
-          following: {
-            connect: {
-              id: args.data.follow
-            }
-          }
-        }
-      })
-    }
-
-    if (args.data.unfollow) {
-      return prisma.mutation.updateUser({
-        where: {
-          id: userId
-        },
-        data: {
-          username: args.data.username,
-          email: args.data.email,
-          password: args.data.password,
-          posts: args.data.posts,
-          location: args.data.location,
-          bio: args.data.bio,
-          following: {
-            disconnect: {
-              id: args.data.unfollow
-            }
-          }
-        }
-      })
     }
 
     return prisma.mutation.updateUser({
       where: {
         id: userId
       },
-      data: args.data
+      data: {
+        following: {
+          connect: {
+            id: args.id
+          }
+        }
+      }
+    }, info)
+  },
+  async unfollowUser(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
+
+    const userExists = await prisma.exists.User({
+      id: args.id
+    })
+
+    if (!userExists) {
+      throw new Error('User does not exist')
+    }
+
+    return prisma.mutation.updateUser({
+      where: {
+        id: userId
+      },
+      data: {
+        following: {
+          disconnect: {
+            id: args.id
+          }
+        }
+      }
     }, info)
   },
   createPost(parent, args, { prisma, request }, info) {

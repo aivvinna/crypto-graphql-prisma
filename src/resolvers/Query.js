@@ -94,7 +94,40 @@ const Query = {
     }
 
     return posts[0]
-  }
+  },
+  // Number of a user's followings
+  userFollowingCount(parent, args, { prisma }, info) {
+
+    return prisma.query.usersConnection({
+      where: {
+        followers_some: {
+          id: args.id
+        }
+      }
+    }, info)
+  },
+  // Number of a user's followers
+  userFollowersCount(parent, args, { prisma }, info) {
+
+    return prisma.query.usersConnection({
+      where: {
+        following_some: {
+          id: args.id
+        }
+      }
+    }, info)
+  },
+  // Number of a user's posts
+  userPostsCount(parent, args, { prisma }, info) {
+
+    return prisma.query.postsConnection({
+      where: {
+        author: {
+          id: args.id
+        }
+      }
+    }, info)
+  },
 }
 
 export { Query as default }
