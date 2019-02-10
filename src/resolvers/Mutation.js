@@ -186,6 +186,84 @@ const Mutation = {
       },
       data: args.data
     }, info)
+  },
+  async upvotePost(parent, args, {prisma, request }, info) {
+    const userId = getUserId(request)
+    const postExists = await prisma.exists.Post({
+      id: args.id
+    })
+
+    if (!postExists) {
+      throw new Error('Unable to update post')
+    }
+
+    const alreadyUpvoted = await prisma.exists.Post({
+      id: args.id,
+      upvotes_some: {
+        id: userId
+      }
+    })
+
+    if (alreadyUpvoted) {
+      throw new Error('Already upvoted')
+    }
+
+    return prisma.mutation.updatePost({
+      where: {
+        id: args.id
+      },
+      data: {
+        upvotes: {
+          connect: {
+            id: userId
+          }
+        },
+        downvotes: {
+          disconnect: {
+            id: userId
+          }
+        }
+      }
+    }, info)
+  },
+  async downvotePost(parent, args, {prisma, request }, info) {
+    const userId = getUserId(request)
+    const postExists = await prisma.exists.Post({
+      id: args.id
+    })
+
+    if (!postExists) {
+      throw new Error('Unable to update post')
+    }
+
+    const alreadyDownvoted = await prisma.exists.Post({
+      id: args.id,
+      downvotes_some: {
+        id: userId
+      }
+    })
+
+    if (alreadyDownvoted) {
+      throw new Error('Already downvoted')
+    }
+
+    return prisma.mutation.updatePost({
+      where: {
+        id: args.id
+      },
+      data: {
+        upvotes: {
+          disconnect: {
+            id: userId
+          }
+        },
+        downvotes: {
+          connect: {
+            id: userId
+          }
+        }
+      }
+    }, info)
   }
 }
 
