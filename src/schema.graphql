@@ -24,6 +24,7 @@ type Query {
     downvotePost(id: ID!): Post!
     followUser(id: ID!): User!
     unfollowUser(id: ID!): User!
+    favCrypto(crypto: String!, array: [String!]!): User!
   }
 
   type Subscription {
