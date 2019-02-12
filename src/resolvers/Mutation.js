@@ -129,6 +129,20 @@ const Mutation = {
       }
     }, info)
   },
+  async unfavCrypto(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
+
+    return prisma.mutation.updateUser({
+      where: {
+        id: userId
+      },
+      data: {
+        favCryptos: {
+          set: args.array.filter((crypto) => crypto !== args.crypto)
+        }
+      }
+    }, info)
+  },
   createPost(parent, args, { prisma, request }, info) {
     const userId = getUserId(request)
 
