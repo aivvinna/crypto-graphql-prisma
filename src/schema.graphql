@@ -51,6 +51,7 @@ type Query {
 
   input UpdateUserInput {
     username: String
+    displayName: String
     email: String
     password: String
     location: String
@@ -71,6 +72,7 @@ type Query {
   type User {
     id: ID!
     username: String!
+    displayName: String!
     email: String
     password: String!
     posts: [Post!]!

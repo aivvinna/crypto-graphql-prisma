@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Feb 11 2019 02:26:21 GMT+0900 (Japan Standard Time)
+# timestamp: Tue Feb 12 2019 23:57:26 GMT+0900 (Japan Standard Time)
 
 type AggregatePost {
   count: Int!
@@ -730,11 +730,12 @@ type Subscription {
 type User implements Node {
   id: ID!
   username: String!
+  displayName: String!
   email: String!
   password: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
-  location: String
-  bio: String
+  location: String!
+  bio: String!
   favCryptos: [String!]!
   upvotedPosts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   downvotedPosts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
@@ -760,6 +761,7 @@ input UserCreatefavCryptosInput {
 
 input UserCreateInput {
   username: String!
+  displayName: String
   email: String!
   password: String!
   location: String
@@ -799,6 +801,7 @@ input UserCreateOneWithoutPostsInput {
 
 input UserCreateWithoutDownvotedPostsInput {
   username: String!
+  displayName: String
   email: String!
   password: String!
   location: String
@@ -812,6 +815,7 @@ input UserCreateWithoutDownvotedPostsInput {
 
 input UserCreateWithoutFollowersInput {
   username: String!
+  displayName: String
   email: String!
   password: String!
   location: String
@@ -825,6 +829,7 @@ input UserCreateWithoutFollowersInput {
 
 input UserCreateWithoutFollowingInput {
   username: String!
+  displayName: String
   email: String!
   password: String!
   location: String
@@ -838,6 +843,7 @@ input UserCreateWithoutFollowingInput {
 
 input UserCreateWithoutPostsInput {
   username: String!
+  displayName: String
   email: String!
   password: String!
   location: String
@@ -851,6 +857,7 @@ input UserCreateWithoutPostsInput {
 
 input UserCreateWithoutUpvotedPostsInput {
   username: String!
+  displayName: String
   email: String!
   password: String!
   location: String
@@ -876,6 +883,8 @@ enum UserOrderByInput {
   id_DESC
   username_ASC
   username_DESC
+  displayName_ASC
+  displayName_DESC
   email_ASC
   email_DESC
   password_ASC
@@ -893,10 +902,11 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   username: String!
+  displayName: String!
   email: String!
   password: String!
-  location: String
-  bio: String
+  location: String!
+  bio: String!
   favCryptos: [String!]!
   updatedAt: DateTime!
   createdAt: DateTime!
@@ -991,6 +1001,46 @@ input UserScalarWhereInput {
 
   """All values not ending with the given string."""
   username_not_ends_with: String
+  displayName: String
+
+  """All values that are not equal to given value."""
+  displayName_not: String
+
+  """All values that are contained in given list."""
+  displayName_in: [String!]
+
+  """All values that are not contained in given list."""
+  displayName_not_in: [String!]
+
+  """All values less than the given value."""
+  displayName_lt: String
+
+  """All values less than or equal the given value."""
+  displayName_lte: String
+
+  """All values greater than the given value."""
+  displayName_gt: String
+
+  """All values greater than or equal the given value."""
+  displayName_gte: String
+
+  """All values containing the given string."""
+  displayName_contains: String
+
+  """All values not containing the given string."""
+  displayName_not_contains: String
+
+  """All values starting with the given string."""
+  displayName_starts_with: String
+
+  """All values not starting with the given string."""
+  displayName_not_starts_with: String
+
+  """All values ending with the given string."""
+  displayName_ends_with: String
+
+  """All values not ending with the given string."""
+  displayName_not_ends_with: String
   email: String
 
   """All values that are not equal to given value."""
@@ -1242,6 +1292,7 @@ input UserUpdatefavCryptosInput {
 
 input UserUpdateInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1256,6 +1307,7 @@ input UserUpdateInput {
 
 input UserUpdateManyDataInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1265,6 +1317,7 @@ input UserUpdateManyDataInput {
 
 input UserUpdateManyMutationInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1330,6 +1383,7 @@ input UserUpdateOneRequiredWithoutPostsInput {
 
 input UserUpdateWithoutDownvotedPostsDataInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1343,6 +1397,7 @@ input UserUpdateWithoutDownvotedPostsDataInput {
 
 input UserUpdateWithoutFollowersDataInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1356,6 +1411,7 @@ input UserUpdateWithoutFollowersDataInput {
 
 input UserUpdateWithoutFollowingDataInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1369,6 +1425,7 @@ input UserUpdateWithoutFollowingDataInput {
 
 input UserUpdateWithoutPostsDataInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1382,6 +1439,7 @@ input UserUpdateWithoutPostsDataInput {
 
 input UserUpdateWithoutUpvotedPostsDataInput {
   username: String
+  displayName: String
   email: String
   password: String
   location: String
@@ -1531,6 +1589,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   username_not_ends_with: String
+  displayName: String
+
+  """All values that are not equal to given value."""
+  displayName_not: String
+
+  """All values that are contained in given list."""
+  displayName_in: [String!]
+
+  """All values that are not contained in given list."""
+  displayName_not_in: [String!]
+
+  """All values less than the given value."""
+  displayName_lt: String
+
+  """All values less than or equal the given value."""
+  displayName_lte: String
+
+  """All values greater than the given value."""
+  displayName_gt: String
+
+  """All values greater than or equal the given value."""
+  displayName_gte: String
+
+  """All values containing the given string."""
+  displayName_contains: String
+
+  """All values not containing the given string."""
+  displayName_not_contains: String
+
+  """All values starting with the given string."""
+  displayName_starts_with: String
+
+  """All values not starting with the given string."""
+  displayName_not_starts_with: String
+
+  """All values ending with the given string."""
+  displayName_ends_with: String
+
+  """All values not ending with the given string."""
+  displayName_not_ends_with: String
   email: String
 
   """All values that are not equal to given value."""
