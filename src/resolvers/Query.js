@@ -77,23 +77,11 @@ const Query = {
   },
   async post(parent, args, { prisma, request }, info) {
     const userId = getUserId(request, false)
-
-    const posts = await prisma.query.posts({
+    return await prisma.query.post({
       where: {
-        id: args.id,
-        OR: [{
-          author: {
-            id: userId
-          }
-        }]
+        id: args.id
       }
     }, info)
-
-    if (posts.length === 0) {
-      throw new Error('Post not found')
-    }
-
-    return posts[0]
   },
   // Number of a user's followings
   userFollowingCount(parent, args, { prisma }, info) {
