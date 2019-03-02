@@ -115,7 +115,7 @@ const Mutation = {
   // Add crypto to favorites. Must provide current favorites as array
   // as an argument. Prisma currently does not support push to scalar
   // lists
-  async favCrypto(parent, args, { prisma, request }, info) {
+  async updateFavCryptos(parent, args, { prisma, request }, info) {
     const userId = getUserId(request)
 
     return prisma.mutation.updateUser({
@@ -124,21 +124,7 @@ const Mutation = {
       },
       data: {
         favCryptos: {
-          set: [...args.array, args.crypto]
-        }
-      }
-    }, info)
-  },
-  async unfavCrypto(parent, args, { prisma, request }, info) {
-    const userId = getUserId(request)
-
-    return prisma.mutation.updateUser({
-      where: {
-        id: userId
-      },
-      data: {
-        favCryptos: {
-          set: args.array.filter((crypto) => crypto !== args.crypto)
+          set: args.cryptos
         }
       }
     }, info)

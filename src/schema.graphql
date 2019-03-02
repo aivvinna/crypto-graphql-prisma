@@ -24,8 +24,7 @@ type Query {
     downvotePost(id: ID!): Post!
     followUser(id: ID!): User!
     unfollowUser(id: ID!): User!
-    favCrypto(crypto: String!, array: [String!]!): User!
-    unfavCrypto(crypto: String!, array: [String!]!): User!
+    updateFavCryptos(cryptos: [String!]!): User!
   }
 
   type Subscription {
@@ -56,6 +55,7 @@ type Query {
     password: String
     location: String
     bio: String
+    favCryptos: [String]
   }
 
   input CreatePostInput {
