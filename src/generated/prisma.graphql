@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Feb 12 2019 23:57:26 GMT+0900 (Japan Standard Time)
+# timestamp: Sat Mar 02 2019 16:56:44 GMT+0900 (Japan Standard Time)
 
 type AggregatePost {
   count: Int!
@@ -1852,5 +1852,6 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
+  username: String
   email: String
 }
