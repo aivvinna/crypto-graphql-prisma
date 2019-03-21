@@ -22,6 +22,8 @@ type Query {
     updatePost(id: ID!, data: UpdatePostInput!): Post!
     upvotePost(id: ID!): Post!
     downvotePost(id: ID!): Post!
+    removeUpvote(id: ID!): Post!
+    removeDownvote(id: ID!): Post!
     followUser(id: ID!): User!
     unfollowUser(id: ID!): User!
     updateFavCryptos(cryptos: [String!]!): User!

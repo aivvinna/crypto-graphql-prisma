@@ -214,29 +214,6 @@ const Mutation = {
       throw new Error('Post does not exist')
     }
 
-    const alreadyUpvoted = await prisma.exists.Post({
-      id: args.id,
-      upvotes_some: {
-        id: userId
-      }
-    })
-
-    // remove upvote if already upvoted
-    if (alreadyUpvoted) {
-      return prisma.mutation.updatePost({
-        where: {
-          id: args.id
-        },
-        data: {
-          upvotes: {
-            disconnect: {
-              id: userId
-            }
-          }
-        }
-      }, info)
-    }
-
     const alreadyDownvoted = await prisma.exists.Post({
       id: args.id,
       downvotes_some: {
@@ -289,29 +266,6 @@ const Mutation = {
       throw new Error('Post does not exist')
     }
 
-    const alreadyDownvoted = await prisma.exists.Post({
-      id: args.id,
-      downvotes_some: {
-        id: userId
-      }
-    })
-
-    // remove downvote if already downvoted
-    if (alreadyDownvoted) {
-      return prisma.mutation.updatePost({
-        where: {
-          id: args.id
-        },
-        data: {
-          downvotes: {
-            disconnect: {
-              id: userId
-            }
-          }
-        }
-      }, info)
-    }
-
     const alreadyUpvoted = await prisma.exists.Post({
       id: args.id,
       upvotes_some: {
@@ -353,7 +307,73 @@ const Mutation = {
         }
       }
     }, info)
-  }
+  },
+  async removeUpvote(parents, args, {prisma, request}, info) {
+    const userId = getUserId(request)
+    const postExists = await prisma.exists.Post({
+      id: args.id
+    })
+
+    if (!postExists) {
+      throw new Error('Post does not exist')
+    }
+
+    const alreadyUpvoted = await prisma.exists.Post({
+      id: args.id,
+      upvotes_some: {
+        id: userId
+      }
+    })
+
+    // remove upvote if already upvoted
+    if (alreadyUpvoted) {
+      return prisma.mutation.updatePost({
+        where: {
+          id: args.id
+        },
+        data: {
+          upvotes: {
+            disconnect: {
+              id: userId
+            }
+          }
+        }
+      }, info)
+    }
+  },
+  async removeDownvote(parents, args, {prisma, request}, info) {
+    const userId = getUserId(request)
+    const postExists = await prisma.exists.Post({
+      id: args.id
+    })
+
+    if (!postExists) {
+      throw new Error('Post does not exist')
+    }
+
+    const alreadyDownvoted = await prisma.exists.Post({
+      id: args.id,
+      downvotes_some: {
+        id: userId
+      }
+    })
+
+    // remove downvote if already downvoted
+    if (alreadyDownvoted) {
+      return prisma.mutation.updatePost({
+        where: {
+          id: args.id
+        },
+        data: {
+          downvotes: {
+            disconnect: {
+              id: userId
+            }
+          }
+        }
+      }, info)
+    }
+  },
 }
 
 export { Mutation as default }
