@@ -1,5 +1,9 @@
 # source: http://localhost:4466
-# timestamp: Sat Mar 02 2019 16:56:44 GMT+0900 (Japan Standard Time)
+# timestamp: Fri Apr 05 2019 18:28:46 GMT+0900 (Japan Standard Time)
+
+type AggregateMessage {
+  count: Int!
+}
 
 type AggregatePost {
   count: Int!
@@ -25,19 +29,485 @@ Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
 
+type Message implements Node {
+  id: ID!
+  content: String!
+  author: User!
+  receiver: User!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type MessageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  content: String!
+  author: UserCreateOneWithoutMessagesAuthoredInput!
+  receiver: UserCreateOneWithoutMessagesReceivedInput!
+}
+
+input MessageCreateManyWithoutAuthorInput {
+  create: [MessageCreateWithoutAuthorInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateManyWithoutReceiverInput {
+  create: [MessageCreateWithoutReceiverInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateWithoutAuthorInput {
+  content: String!
+  receiver: UserCreateOneWithoutMessagesReceivedInput!
+}
+
+input MessageCreateWithoutReceiverInput {
+  content: String!
+  author: UserCreateOneWithoutMessagesAuthoredInput!
+}
+
+"""An edge in a connection."""
+type MessageEdge {
+  """The item at the end of the edge."""
+  node: Message!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type MessagePreviousValues {
+  id: ID!
+  content: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+input MessageScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  content: String
+
+  """All values that are not equal to given value."""
+  content_not: String
+
+  """All values that are contained in given list."""
+  content_in: [String!]
+
+  """All values that are not contained in given list."""
+  content_not_in: [String!]
+
+  """All values less than the given value."""
+  content_lt: String
+
+  """All values less than or equal the given value."""
+  content_lte: String
+
+  """All values greater than the given value."""
+  content_gt: String
+
+  """All values greater than or equal the given value."""
+  content_gte: String
+
+  """All values containing the given string."""
+  content_contains: String
+
+  """All values not containing the given string."""
+  content_not_contains: String
+
+  """All values starting with the given string."""
+  content_starts_with: String
+
+  """All values not starting with the given string."""
+  content_not_starts_with: String
+
+  """All values ending with the given string."""
+  content_ends_with: String
+
+  """All values not ending with the given string."""
+  content_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+}
+
+input MessageUpdateInput {
+  content: String
+  author: UserUpdateOneRequiredWithoutMessagesAuthoredInput
+  receiver: UserUpdateOneRequiredWithoutMessagesReceivedInput
+}
+
+input MessageUpdateManyDataInput {
+  content: String
+}
+
+input MessageUpdateManyMutationInput {
+  content: String
+}
+
+input MessageUpdateManyWithoutAuthorInput {
+  create: [MessageCreateWithoutAuthorInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutAuthorInput!]
+  updateMany: [MessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [MessageScalarWhereInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input MessageUpdateManyWithoutReceiverInput {
+  create: [MessageCreateWithoutReceiverInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutReceiverInput!]
+  updateMany: [MessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [MessageScalarWhereInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutReceiverInput!]
+}
+
+input MessageUpdateManyWithWhereNestedInput {
+  where: MessageScalarWhereInput!
+  data: MessageUpdateManyDataInput!
+}
+
+input MessageUpdateWithoutAuthorDataInput {
+  content: String
+  receiver: UserUpdateOneRequiredWithoutMessagesReceivedInput
+}
+
+input MessageUpdateWithoutReceiverDataInput {
+  content: String
+  author: UserUpdateOneRequiredWithoutMessagesAuthoredInput
+}
+
+input MessageUpdateWithWhereUniqueWithoutAuthorInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutAuthorDataInput!
+}
+
+input MessageUpdateWithWhereUniqueWithoutReceiverInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutReceiverDataInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutAuthorInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutAuthorDataInput!
+  create: MessageCreateWithoutAuthorInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutReceiverInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutReceiverDataInput!
+  create: MessageCreateWithoutReceiverInput!
+}
+
+input MessageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  content: String
+
+  """All values that are not equal to given value."""
+  content_not: String
+
+  """All values that are contained in given list."""
+  content_in: [String!]
+
+  """All values that are not contained in given list."""
+  content_not_in: [String!]
+
+  """All values less than the given value."""
+  content_lt: String
+
+  """All values less than or equal the given value."""
+  content_lte: String
+
+  """All values greater than the given value."""
+  content_gt: String
+
+  """All values greater than or equal the given value."""
+  content_gte: String
+
+  """All values containing the given string."""
+  content_contains: String
+
+  """All values not containing the given string."""
+  content_not_contains: String
+
+  """All values starting with the given string."""
+  content_starts_with: String
+
+  """All values not starting with the given string."""
+  content_not_starts_with: String
+
+  """All values ending with the given string."""
+  content_ends_with: String
+
+  """All values not ending with the given string."""
+  content_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  author: UserWhereInput
+  receiver: UserWhereInput
+}
+
+input MessageWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createPost(data: PostCreateInput!): Post!
+  createMessage(data: MessageCreateInput!): Message!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
   deleteUser(where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
+  deleteMessage(where: MessageWhereUniqueInput!): Message
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
+  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -710,10 +1180,13 @@ enum PrismaDatabase {
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   user(where: UserWhereUniqueInput!): User
   post(where: PostWhereUniqueInput!): Post
+  message(where: MessageWhereUniqueInput!): Message
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -725,6 +1198,7 @@ type Query {
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
 }
 
 type User implements Node {
@@ -741,6 +1215,8 @@ type User implements Node {
   downvotedPosts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   following(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   followers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  messagesAuthored(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  messagesReceived(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -772,6 +1248,8 @@ input UserCreateInput {
   downvotedPosts: PostCreateManyWithoutDownvotesInput
   following: UserCreateManyWithoutFollowersInput
   followers: UserCreateManyWithoutFollowingInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
 }
 
 input UserCreateManyWithoutDownvotedPostsInput {
@@ -794,6 +1272,16 @@ input UserCreateManyWithoutUpvotedPostsInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateOneWithoutMessagesAuthoredInput {
+  create: UserCreateWithoutMessagesAuthoredInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutMessagesReceivedInput {
+  create: UserCreateWithoutMessagesReceivedInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -811,6 +1299,8 @@ input UserCreateWithoutDownvotedPostsInput {
   upvotedPosts: PostCreateManyWithoutUpvotesInput
   following: UserCreateManyWithoutFollowersInput
   followers: UserCreateManyWithoutFollowingInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
 }
 
 input UserCreateWithoutFollowersInput {
@@ -825,6 +1315,8 @@ input UserCreateWithoutFollowersInput {
   upvotedPosts: PostCreateManyWithoutUpvotesInput
   downvotedPosts: PostCreateManyWithoutDownvotesInput
   following: UserCreateManyWithoutFollowersInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
 }
 
 input UserCreateWithoutFollowingInput {
@@ -839,6 +1331,40 @@ input UserCreateWithoutFollowingInput {
   upvotedPosts: PostCreateManyWithoutUpvotesInput
   downvotedPosts: PostCreateManyWithoutDownvotesInput
   followers: UserCreateManyWithoutFollowingInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
+}
+
+input UserCreateWithoutMessagesAuthoredInput {
+  username: String!
+  displayName: String
+  email: String!
+  password: String!
+  location: String
+  bio: String
+  favCryptos: UserCreatefavCryptosInput
+  posts: PostCreateManyWithoutAuthorInput
+  upvotedPosts: PostCreateManyWithoutUpvotesInput
+  downvotedPosts: PostCreateManyWithoutDownvotesInput
+  following: UserCreateManyWithoutFollowersInput
+  followers: UserCreateManyWithoutFollowingInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
+}
+
+input UserCreateWithoutMessagesReceivedInput {
+  username: String!
+  displayName: String
+  email: String!
+  password: String!
+  location: String
+  bio: String
+  favCryptos: UserCreatefavCryptosInput
+  posts: PostCreateManyWithoutAuthorInput
+  upvotedPosts: PostCreateManyWithoutUpvotesInput
+  downvotedPosts: PostCreateManyWithoutDownvotesInput
+  following: UserCreateManyWithoutFollowersInput
+  followers: UserCreateManyWithoutFollowingInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -853,6 +1379,8 @@ input UserCreateWithoutPostsInput {
   downvotedPosts: PostCreateManyWithoutDownvotesInput
   following: UserCreateManyWithoutFollowersInput
   followers: UserCreateManyWithoutFollowingInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
 }
 
 input UserCreateWithoutUpvotedPostsInput {
@@ -867,6 +1395,8 @@ input UserCreateWithoutUpvotedPostsInput {
   downvotedPosts: PostCreateManyWithoutDownvotesInput
   following: UserCreateManyWithoutFollowersInput
   followers: UserCreateManyWithoutFollowingInput
+  messagesAuthored: MessageCreateManyWithoutAuthorInput
+  messagesReceived: MessageCreateManyWithoutReceiverInput
 }
 
 """An edge in a connection."""
@@ -1303,6 +1833,8 @@ input UserUpdateInput {
   downvotedPosts: PostUpdateManyWithoutDownvotesInput
   following: UserUpdateManyWithoutFollowersInput
   followers: UserUpdateManyWithoutFollowingInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
 }
 
 input UserUpdateManyDataInput {
@@ -1374,6 +1906,20 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
+input UserUpdateOneRequiredWithoutMessagesAuthoredInput {
+  create: UserCreateWithoutMessagesAuthoredInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutMessagesAuthoredDataInput
+  upsert: UserUpsertWithoutMessagesAuthoredInput
+}
+
+input UserUpdateOneRequiredWithoutMessagesReceivedInput {
+  create: UserCreateWithoutMessagesReceivedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutMessagesReceivedDataInput
+  upsert: UserUpsertWithoutMessagesReceivedInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -1393,6 +1939,8 @@ input UserUpdateWithoutDownvotedPostsDataInput {
   upvotedPosts: PostUpdateManyWithoutUpvotesInput
   following: UserUpdateManyWithoutFollowersInput
   followers: UserUpdateManyWithoutFollowingInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
 }
 
 input UserUpdateWithoutFollowersDataInput {
@@ -1407,6 +1955,8 @@ input UserUpdateWithoutFollowersDataInput {
   upvotedPosts: PostUpdateManyWithoutUpvotesInput
   downvotedPosts: PostUpdateManyWithoutDownvotesInput
   following: UserUpdateManyWithoutFollowersInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
 }
 
 input UserUpdateWithoutFollowingDataInput {
@@ -1421,6 +1971,40 @@ input UserUpdateWithoutFollowingDataInput {
   upvotedPosts: PostUpdateManyWithoutUpvotesInput
   downvotedPosts: PostUpdateManyWithoutDownvotesInput
   followers: UserUpdateManyWithoutFollowingInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
+}
+
+input UserUpdateWithoutMessagesAuthoredDataInput {
+  username: String
+  displayName: String
+  email: String
+  password: String
+  location: String
+  bio: String
+  favCryptos: UserUpdatefavCryptosInput
+  posts: PostUpdateManyWithoutAuthorInput
+  upvotedPosts: PostUpdateManyWithoutUpvotesInput
+  downvotedPosts: PostUpdateManyWithoutDownvotesInput
+  following: UserUpdateManyWithoutFollowersInput
+  followers: UserUpdateManyWithoutFollowingInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
+}
+
+input UserUpdateWithoutMessagesReceivedDataInput {
+  username: String
+  displayName: String
+  email: String
+  password: String
+  location: String
+  bio: String
+  favCryptos: UserUpdatefavCryptosInput
+  posts: PostUpdateManyWithoutAuthorInput
+  upvotedPosts: PostUpdateManyWithoutUpvotesInput
+  downvotedPosts: PostUpdateManyWithoutDownvotesInput
+  following: UserUpdateManyWithoutFollowersInput
+  followers: UserUpdateManyWithoutFollowingInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -1435,6 +2019,8 @@ input UserUpdateWithoutPostsDataInput {
   downvotedPosts: PostUpdateManyWithoutDownvotesInput
   following: UserUpdateManyWithoutFollowersInput
   followers: UserUpdateManyWithoutFollowingInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
 }
 
 input UserUpdateWithoutUpvotedPostsDataInput {
@@ -1449,6 +2035,8 @@ input UserUpdateWithoutUpvotedPostsDataInput {
   downvotedPosts: PostUpdateManyWithoutDownvotesInput
   following: UserUpdateManyWithoutFollowersInput
   followers: UserUpdateManyWithoutFollowingInput
+  messagesAuthored: MessageUpdateManyWithoutAuthorInput
+  messagesReceived: MessageUpdateManyWithoutReceiverInput
 }
 
 input UserUpdateWithWhereUniqueWithoutDownvotedPostsInput {
@@ -1469,6 +2057,16 @@ input UserUpdateWithWhereUniqueWithoutFollowingInput {
 input UserUpdateWithWhereUniqueWithoutUpvotedPostsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutUpvotedPostsDataInput!
+}
+
+input UserUpsertWithoutMessagesAuthoredInput {
+  update: UserUpdateWithoutMessagesAuthoredDataInput!
+  create: UserCreateWithoutMessagesAuthoredInput!
+}
+
+input UserUpsertWithoutMessagesReceivedInput {
+  update: UserUpdateWithoutMessagesReceivedDataInput!
+  create: UserCreateWithoutMessagesReceivedInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -1848,6 +2446,12 @@ input UserWhereInput {
   followers_every: UserWhereInput
   followers_some: UserWhereInput
   followers_none: UserWhereInput
+  messagesAuthored_every: MessageWhereInput
+  messagesAuthored_some: MessageWhereInput
+  messagesAuthored_none: MessageWhereInput
+  messagesReceived_every: MessageWhereInput
+  messagesReceived_some: MessageWhereInput
+  messagesReceived_none: MessageWhereInput
 }
 
 input UserWhereUniqueInput {

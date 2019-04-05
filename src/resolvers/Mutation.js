@@ -374,6 +374,25 @@ const Mutation = {
       }, info)
     }
   },
+  createMessage(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
+
+    return prisma.mutation.createMessage({
+      data: {
+        content: args.data.content,
+        author: {
+          connect: {
+            id: userId
+          }
+        },
+        receiver: {
+          connect: {
+            id: args.data.receiverId
+          }
+        }
+      }
+    }, info)
+  }
 }
 
 export { Mutation as default }

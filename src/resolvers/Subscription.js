@@ -26,6 +26,21 @@ const Subscription = {
         }
       }, info)
     }
+  },
+  message: {
+    subscribe(parent, args, { prisma, request }, info) {
+      const userId = getUserId(request)
+
+      return prisma.subscription.message({
+        where: {
+          node: {
+            receiver: {
+              id: userId
+            }
+          }
+        }
+      }, info)
+    }
   }
 }
 

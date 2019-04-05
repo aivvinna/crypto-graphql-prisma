@@ -12,6 +12,8 @@ type User {
   downvotedPosts: [Post!]! @relation(name: "DownvotesToUser")
   following: [User!]! @relation(name: "UserToUser")
   followers: [User!]! @relation(name: "UserToUser")
+  messagesAuthored: [Message!]! @relation(name: "AuthoredMessageToUser")
+  messagesReceived: [Message!]! @relation(name: "ReceivedMessageToUser")
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -25,6 +27,15 @@ type Post {
   author: User! @relation(name: "PostToUser", onDelete: SET_NULL)
   parent: Post @relation(name: "PostToPost")
   posts: [Post!]! @relation(name: "PostToPost")
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type Message {
+  id: ID! @unique
+  content: String!
+  author: User! @relation(name: "AuthoredMessageToUser")
+  receiver: User! @relation(name: "ReceivedMessageToUser")
   updatedAt: DateTime!
   createdAt: DateTime!
 }

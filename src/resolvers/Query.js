@@ -116,6 +116,41 @@ const Query = {
       }
     }, info)
   },
+  // Messages between two users
+  messages(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
+    const opArgs = {
+      first: args.first,
+      skip: args.skip,
+      after: args.after,
+      orderBy: args.orderBy,
+      where: {
+        OR: [{
+          AND: [{
+            author: {
+              id: userId
+            }
+          }, {
+            receiver: {
+              id: args.otherUserId
+            }
+          }]
+        }, {
+          AND: [{
+            receiver: {
+              id: userId
+            }
+          }, {
+            author: {
+              id: args.otherUserId
+            }
+          }]
+        }]
+      }
+    }
+
+    return prisma.query.messages(opArgs, info)
+  }
 }
 
 export { Query as default }

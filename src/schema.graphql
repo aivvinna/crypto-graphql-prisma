@@ -10,6 +10,7 @@ type Query {
     userFollowingCount(id: ID!): UserConnection!
     userFollowersCount(id: ID!): UserConnection!
     userPostsCount(id: ID!): PostConnection!
+    messages(otherUserId: ID!, first: Int, skip: Int, after: String, orderBy: MessageOrderByInput): [Message!]!
   }
 
   type Mutation {
@@ -27,11 +28,13 @@ type Query {
     followUser(id: ID!): User!
     unfollowUser(id: ID!): User!
     updateFavCryptos(cryptos: [String!]!): User!
+    createMessage(data: CreateMessageInput): Message!
   }
 
   type Subscription {
     post: PostSubscriptionPayload!
     myPost: PostSubscriptionPayload!
+    message: MessageSubscriptionPayload!
   }
 
   type AuthPayload {
@@ -71,6 +74,11 @@ type Query {
     category: [String!]
   }
 
+  input CreateMessageInput {
+    content: String!
+    receiverId: ID!
+  }
+
   type User {
     id: ID!
     username: String!
@@ -85,6 +93,8 @@ type Query {
     downvotedPosts: [Post!]!
     following: [User!]!
     followers: [User!]!
+    messagesAuthored: [Message!]!
+    messagesReceived: [Message!]!
     updatedAt: String!
     createdAt: String!
   }
@@ -102,6 +112,15 @@ type Query {
     createdAt: String!
   }
 
+  type Message {
+    id: ID!
+    content: String!
+    author: User!
+    receiver: User!
+    updatedAt: String!
+    createdAt: String!
+  }
+
   enum MutationType {
     CREATED
     UPDATED
@@ -111,4 +130,9 @@ type Query {
   type PostSubscriptionPayload {
     mutation: MutationType!
     node: Post
+  }
+
+  type MessageSubscriptionPayload {
+    mutation: MutationType!
+    node: Message
   }
