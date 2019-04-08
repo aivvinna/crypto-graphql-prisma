@@ -19,6 +19,14 @@ const server = new GraphQLServer({
   fragmentReplacements
 })
 
-server.start({ port: process.env.PORT || 4000, cors: { credentials: true, origin: ["http://localhost:8080"]} }, () => {
-  console.log('Server is up')
+const options = {
+  port: process.env.PORT || 4000,
+  cors: {
+    credentials: true,
+    origin: ["http://localhost:8080"]
+  },
+}
+
+server.start(options, ({ port }) => {
+  console.log(`Server is up on port ${port}`)
 })
