@@ -150,6 +150,34 @@ const Query = {
     }
 
     return prisma.query.messages(opArgs, info)
+  },
+  usersConversed(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
+    const opArgs = {
+      where: {
+        AND: [{
+          OR: [{
+            messagesAuthored_some: {
+              receiver: {
+                id: userId
+              }
+            }
+          }, {
+            messagesReceived_some: {
+              receiver: {
+                id: userId
+              }
+            }
+          }]
+        }, {
+          NOT: {
+            id: userId
+          }
+        }]
+      }
+    }
+
+    return prisma.query.users(opArgs, info)
   }
 }
 
