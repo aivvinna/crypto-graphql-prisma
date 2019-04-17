@@ -67,7 +67,7 @@
   input CreatePostInput {
     content: String!
     category: PostCreatecategoryInput
-    postId: ID
+    parentId: ID
   }
 
   input UpdatePostInput {

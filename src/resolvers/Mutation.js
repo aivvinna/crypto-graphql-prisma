@@ -132,7 +132,7 @@ const Mutation = {
   createPost(parent, args, { prisma, request }, info) {
     const userId = getUserId(request)
 
-    if (args.data.postId) {
+    if (args.data.parentId) {
       return prisma.mutation.createPost({
         data: {
           content: args.data.content,
@@ -146,7 +146,7 @@ const Mutation = {
           },
           parent: {
             connect: {
-              id: args.data.postId
+              id: args.data.parentId
             }
           }
         }
