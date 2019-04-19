@@ -1,4 +1,5 @@
 import getUserId from '../utils/getUserId'
+import titleCase from '../utils/titleCase'
 
 const Query = {
   users(parent, args, { prisma }, info) {
@@ -13,6 +14,20 @@ const Query = {
       opArgs.where = {
         OR: [{
           username_contains: args.query
+        }, {
+          displayName_contains: args.query
+        }, {
+          username_contains: args.query.toUpperCase()
+        }, {
+          displayName_contains: args.query.toUpperCase()
+        }, {
+          username_contains: args.query.toLowerCase()
+        }, {
+          displayName_contains: args.query.toLowerCase()
+        }, {
+          username_contains: titleCase(args.query)
+        }, {
+          displayName_contains: titleCase(args.query)
         }]
       }
     }
@@ -60,7 +75,11 @@ const Query = {
         OR: [{
           content_contains: args.query
         }, {
-          category_contains: args.query
+          content_contains: args.query.toUpperCase()
+        }, {
+          content_contains: args.query.toLowerCase()
+        }, {
+          content_contains: titleCase(args.query)
         }]
       }
     }
