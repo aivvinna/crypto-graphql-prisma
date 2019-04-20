@@ -35,7 +35,9 @@ const Query = {
   },
   user(parent, args, { prisma }, info) {
     return prisma.query.user({
-      where: args.where
+      where: {
+        username: args.username
+      }
     }, info)
   },
   myPosts(parent, args, { prisma, request }, info) {

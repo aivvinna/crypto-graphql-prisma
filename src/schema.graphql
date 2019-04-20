@@ -2,7 +2,7 @@
 
   type Query {
     users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
-    user(where: UserWhereUniqueInput): User!
+    user(username: String): User!
     usersConversed: [User!]!
     posts(where: PostWhereInput, query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
     myPosts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
@@ -86,14 +86,14 @@
     displayName: String!
     email: String
     password: String!
-    posts: [Post!]!
+    posts(first: Int, skip: Int, orderBy: PostOrderByInput): [Post!]!
     location: String!
     bio: String!
     favCryptos: [String!]!
     upvotedPosts: [Post!]!
     downvotedPosts: [Post!]!
-    following: [User!]!
-    followers: [User!]!
+    following(first: Int, skip: Int, orderBy: UserOrderByInput): [User!]!
+    followers(first: Int, skip: Int, orderBy: UserOrderByInput): [User!]!
     messagesAuthored: [Message!]!
     messagesReceived: [Message!]!
     updatedAt: String!
